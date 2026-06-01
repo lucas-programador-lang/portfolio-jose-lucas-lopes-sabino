@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>José Lucas Lopes Sabino — Tech Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #09090f;
+      --bg2:       #0f0f1a;
+      --bg3:       #13131f;
+      --card:      #141420;
+      --border:    rgba(255,255,255,0.07);
+      --accent:    #00e5ff;
+      --accent2:   #7c6dfa;
+      --accent3:   #ff6b6b;
+      --gold:      #f5c842;
+      --text:      #e8e8f0;
+      --muted:     #7a7a9a;
+      --mono:      'JetBrains Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 3px; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(9,9,15,0.7);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: 0.02em;
+      color: var(--text);
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-cta {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: .5rem 1.2rem;
+      text-decoration: none;
+      transition: background .2s, color .2s;
+    }
+    .nav-cta:hover { background: var(--accent); color: var(--bg); }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding: 0 4rem;
+      overflow: hidden;
+    }
+    .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+    }
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,109,250,0.15) 0%, transparent 70%);
+      top: -100px; right: -100px;
+      pointer-events: none;
+    }
+    .hero-glow2 {
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,229,255,0.1) 0%, transparent 70%);
+      bottom: 50px; left: -50px;
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 900px; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(0,229,255,0.3);
+      background: rgba(0,229,255,0.05);
+      padding: .4rem 1rem;
+      margin-bottom: 2rem;
+      animation: fadeUp .6s ease both;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .4; transform: scale(1.5); }
+    }
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3rem, 7vw, 6rem);
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      animation: fadeUp .7s ease .1s both;
+    }
+    .hero-title .line2 { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.2); }
+    .hero-title .accent-word {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 560px;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+      animation: fadeUp .7s ease .2s both;
+    }
+    .hero-sub strong { color: var(--text); font-weight: 500; }
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      animation: fadeUp .7s ease .3s both;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, var(--accent2) 0%, var(--accent) 100%);
+      color: var(--bg);
+      font-weight: 600;
+      padding: .85rem 2rem;
+      text-decoration: none;
+      transition: opacity .2s, transform .2s;
+    }
+    .btn-primary:hover { opacity: .85; transform: translateY(-2px); }
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .btn-ghost:hover { color: var(--text); }
+    .hero-stats {
+      position: absolute;
+      right: 4rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      animation: fadeLeft .8s ease .4s both;
+    }
+    .stat-item { text-align: right; }
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--text) 0%, var(--muted) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeLeft {
+      from { opacity: 0; transform: translate(30px, -50%); }
+      to   { opacity: 1; transform: translate(0, -50%); }
+    }
+
+    /* ─── SECTIONS ─── */
+    section { position: relative; z-index: 1; }
+    .section-inner { max-width: 1100px; margin: 0 auto; padding: 7rem 4rem; }
+    .section-tag {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: .8rem;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+    .section-desc {
+      color: var(--muted);
+      font-size: 1.05rem;
+      font-weight: 300;
+      max-width: 520px;
+      margin-bottom: 3.5rem;
+    }
+
+    /* ─── ABOUT ─── */
+    #about { background: var(--bg2); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .about-visual {
+      position: relative;
+    }
+    .avatar-ring {
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      border: 2px solid rgba(0,229,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin: 0 auto;
+    }
+    .avatar-ring::before {
+      content: '';
+      position: absolute;
+      inset: -12px;
+      border-radius: 50%;
+      border: 1px dashed rgba(0,229,255,0.15);
+      animation: spin 20s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .avatar-inner {
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent2) 0%, var(--accent) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-size: 4rem;
+      font-weight: 800;
+      color: var(--bg);
+    }
+    .about-chip {
+      position: absolute;
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: .6rem 1rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+    }
+    .chip-1 { bottom: 10px; left: -20px; }
+    .chip-2 { top: 20px; right: -30px; color: var(--gold); }
+    .about-text h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+    }
+    .about-text p {
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .about-text p strong { color: var(--text); font-weight: 500; }
+    .info-list { margin-top: 2rem; display: flex; flex-direction: column; gap: .8rem; }
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: .9rem;
+    }
+    .info-icon {
+      width: 36px; height: 36px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      background: var(--card);
+    }
+    .info-label { color: var(--muted); font-size: .8rem; font-family: var(--mono); }
+    .info-val { color: var(--text); font-size: .95rem; }
+
+    /* ─── EDUCATION / COURSES ─── */
+    #cursos { background: var(--bg); }
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    .course-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .3s, transform .3s;
+    }
+    .course-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+    .course-card.c1::before { background: linear-gradient(90deg, var(--accent2), var(--accent)); }
+    .course-card.c2::before { background: linear-gradient(90deg, var(--gold), #ff9f43); }
+    .course-card.c3::before { background: linear-gradient(90deg, var(--accent3), #ff9f43); }
+    .course-card.c4::before { background: linear-gradient(90deg, #26d0ce, #1a2980); }
+    .course-card.c5::before { background: linear-gradient(90deg, var(--accent2), #e040fb); }
+    .course-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-4px); }
+    .course-inst {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      padding: .3rem .8rem;
+      display: inline-block;
+      border: 1px solid var(--border);
+    }
+    .c1 .course-inst { color: var(--accent); border-color: rgba(0,229,255,0.2); background: rgba(0,229,255,0.05); }
+    .c2 .course-inst { color: var(--gold); border-color: rgba(245,200,66,0.2); background: rgba(245,200,66,0.05); }
+    .c3 .course-inst { color: var(--accent3); border-color: rgba(255,107,107,0.2); background: rgba(255,107,107,0.05); }
+    .c4 .course-inst { color: #26d0ce; border-color: rgba(38,208,206,0.2); background: rgba(38,208,206,0.05); }
+    .c5 .course-inst { color: var(--accent2); border-color: rgba(124,109,250,0.2); background: rgba(124,109,250,0.05); }
+    .course-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: .7rem;
+      line-height: 1.3;
+    }
+    .course-desc {
+      color: var(--muted);
+      font-size: .9rem;
+      font-weight: 300;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .course-meta {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+    .meta-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--muted);
+    }
+    .c1 .meta-dot { background: var(--accent); }
+    .c2 .meta-dot { background: var(--gold); }
+    .c3 .meta-dot { background: var(--accent3); }
+    .c4 .meta-dot { background: #26d0ce; }
+    .c5 .meta-dot { background: var(--accent2); }
+    .course-badge {
+      position: absolute;
+      top: 1.5rem; right: 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: .3rem .7rem;
+      background: rgba(0,255,100,0.1);
+      color: #4ade80;
+      border: 1px solid rgba(74,222,128,0.2);
+    }
+    /* full-width card */
+    .course-card.wide { grid-column: span 2; }
+
+    /* ─── SKILLS ─── */
+    #habilidades { background: var(--bg2); }
+    .skills-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .skills-left p {
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+    .skills-right { display: flex; flex-direction: column; gap: 1.2rem; }
+    .skill-row {}
+    .skill-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: .5rem;
+    }
+    .skill-name { font-family: var(--mono); font-size: .8rem; letter-spacing: 0.08em; color: var(--text); }
+    .skill-pct { font-family: var(--mono); font-size: .8rem; color: var(--muted); }
+    .skill-bar {
+      height: 3px;
+      background: rgba(255,255,255,0.06);
+      position: relative;
+      overflow: hidden;
+    }
+    .skill-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      transform-origin: left;
+      animation: barGrow 1s ease both;
+    }
+    @keyframes barGrow {
+      from { transform: scaleX(0); }
+      to   { transform: scaleX(1); }
+    }
+    .tags-area { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 2.5rem; }
+    .tag {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: .4rem 1rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      transition: border-color .2s, color .2s;
+    }
+    .tag:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ─── TIMELINE ─── */
+    #trajetoria { background: var(--bg); }
+    .timeline { position: relative; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 24px; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--accent2), var(--accent), transparent);
+    }
+    .tl-item {
+      display: flex;
+      gap: 2.5rem;
+      padding: 2rem 0;
+      position: relative;
+    }
+    .tl-dot {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 2px solid var(--accent2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .tl-content { flex: 1; padding-top: .4rem; }
+    .tl-date {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: .5rem;
+    }
+    .tl-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: .4rem;
+    }
+    .tl-sub { color: var(--muted); font-size: .9rem; font-weight: 300; }
+
+    /* ─── CONTACT ─── */
+    #contato { background: var(--bg2); }
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .contact-left p {
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+    .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--text);
+      padding: 1rem 1.2rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      transition: border-color .2s, transform .2s;
+    }
+    .contact-link:hover { border-color: var(--accent); transform: translateX(6px); }
+    .cl-icon {
+      width: 40px; height: 40px;
+      background: rgba(0,229,255,0.08);
+      border: 1px solid rgba(0,229,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .cl-label { font-family: var(--mono); font-size: .7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+    .cl-val { font-size: .95rem; color: var(--text); }
+    .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+    .form-group { display: flex; flex-direction: column; gap: .5rem; }
+    .form-group label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .form-group input,
+    .form-group textarea {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .95rem;
+      padding: .9rem 1.1rem;
+      outline: none;
+      transition: border-color .2s;
+      resize: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--accent); }
+    .form-group textarea { min-height: 120px; }
+    .btn-submit {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: var(--bg);
+      font-weight: 700;
+      padding: 1rem 2rem;
+      border: none;
+      cursor: pointer;
+      transition: opacity .2s;
+      align-self: flex-start;
+    }
+    .btn-submit:hover { opacity: .85; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+    .footer-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--muted);
+    }
+    .footer-logo span { color: var(--accent); }
+    .footer-copy {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ─── DIVIDER LINE ─── */
+    .divider {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      #hero { padding: 0 1.5rem; }
+      .hero-stats { display: none; }
+      .section-inner { padding: 5rem 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .avatar-ring { width: 200px; height: 200px; }
+      .avatar-inner { width: 160px; height: 160px; font-size: 3rem; }
+      .courses-grid { grid-template-columns: 1fr; }
+      .course-card.wide { grid-column: span 1; }
+      .skills-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+      .contact-wrap { grid-template-columns: 1fr; gap: 3rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+      .hero-title { font-size: clamp(2.2rem, 9vw, 3.5rem); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════ NAV ════════════════ -->
+<nav>
+  <div class="nav-logo">JL<span>.</span>Sabino</div>
+  <ul class="nav-links">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#cursos">Cursos</a></li>
+    <li><a href="#habilidades">Habilidades</a></li>
+    <li><a href="#trajetoria">Trajetória</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+  <a href="#contato" class="nav-cta">Contato</a>
+</nav>
+
+<!-- ════════════════ HERO ════════════════ -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Disponível para oportunidades</div>
+    <h1 class="hero-title">
+      José Lucas<br>
+      <span class="line2">Lopes</span>
+      <span class="accent-word"> Sabino</span>
+    </h1>
+    <p class="hero-sub">
+      Técnico em <strong>Redes de Computadores</strong> · Estudante de
+      <strong>Ciência da Computação</strong> · Porto Velho, RO
+    </p>
+    <div class="hero-actions">
+      <a href="#cursos" class="btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        Ver Certificações
+      </a>
+      <a href="#sobre" class="btn-ghost">
+        Sobre mim
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">4+</div>
+      <div class="stat-label">Certificações</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">1620<span style="font-size:1.2rem">h</span></div>
+      <div class="stat-label">Horas de curso</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">8°</div>
+      <div class="stat-label">Período · CC</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════ SOBRE ════════════════ -->
+<section id="sobre">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-visual">
+        <div class="avatar-ring">
+          <div class="avatar-inner">JL</div>
+        </div>
+        <div class="about-chip chip-1">
+          <span>📍 Porto Velho · RO</span>
+        </div>
+        <div class="about-chip chip-2">
+          <span>🎓 CC · 8° Período</span>
+        </div>
+      </div>
+      <div class="about-text">
+        <div class="section-tag">// sobre</div>
+        <h3>Apaixonado por<br>tecnologia e redes</h3>
+        <p>
+          Sou <strong>José Lucas Lopes Sabino</strong>, tenho 24 anos e moro em Porto Velho, RO.
+          Técnico em Redes de Computadores formado pelo <strong>SENAI Rondônia</strong> e atualmente
+          cursando o 8° período de <strong>Ciência da Computação na UNIR</strong>, com conclusão
+          prevista para 2027.
+        </p>
+        <p>
+          Ao longo da minha trajetória acumulei mais de <strong>1.600 horas</strong> em formações
+          técnicas e de extensão, incluindo o programa <strong>N.A.V.E TECH RO</strong> da UNIR em
+          parceria com a Samsung — com trilhas de Tecnologia, Inovação e Fab Lab.
+        </p>
+        <div class="info-list">
+          <div class="info-item">
+            <div class="info-icon">🎂</div>
+            <div>
+              <div class="info-label">Idade</div>
+              <div class="info-val">24 anos (08/08/2001)</div>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">📍</div>
+            <div>
+              <div class="info-label">Localização</div>
+              <div class="info-val">Porto Velho, Rondônia — Brasil</div>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">🎓</div>
+            <div>
+              <div class="info-label">Graduação</div>
+              <div class="info-val">Ciência da Computação · UNIR · 8° período</div>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">🏅</div>
+            <div>
+              <div class="info-label">Formação Técnica</div>
+              <div class="info-val">Técnico em Redes de Computadores · SENAI</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════ CURSOS ════════════════ -->
+<section id="cursos">
+  <div class="section-inner">
+    <div class="section-tag">// certificações & formações</div>
+    <h2 class="section-title">Cursos & Diplomas</h2>
+    <p class="section-desc">Formações técnicas e acadêmicas com documentação oficial emitida pelas instituições.</p>
+
+    <div class="courses-grid">
+
+      <!-- Card 1 — Técnico em Redes -->
+      <div class="course-card c1 wide">
+        <span class="course-badge">✓ Diplomado</span>
+        <div class="course-inst">SENAI · Rondônia</div>
+        <div class="course-title">Técnico em Redes de Computadores</div>
+        <div class="course-desc">
+          Curso Técnico de Nível Médio em Aprendizagem Industrial, com formação completa em
+          infraestrutura de redes, cabeamento estruturado, protocolos de comunicação, segurança
+          de redes, administração de servidores e suporte técnico. Diplomado pelo CEET – Centro
+          de Excelência em Educação e Tecnologia SENAI Sebastião Camargo.
+        </div>
+        <div class="course-meta">
+          <div class="meta-item"><div class="meta-dot"></div>1.000 horas</div>
+          <div class="meta-item"><div class="meta-dot"></div>Concluído em 20/02/2025</div>
+          <div class="meta-item"><div class="meta-dot"></div>Diploma emitido em 16/05/2025</div>
+          <div class="meta-item"><div class="meta-dot"></div>Nível Médio Técnico</div>
+        </div>
+      </div>
+
+      <!-- Card 2 — Operador de Computador -->
+      <div class="course-card c2">
+        <span class="course-badge">✓ Certificado</span>
+        <div class="course-inst">SENAI · Rondônia</div>
+        <div class="course-title">Operador de Computador</div>
+        <div class="course-desc">
+          Certificado de Aprendizagem Industrial Básica com foco em operação de sistemas,
+          pacotes de escritório, internet e ferramentas computacionais essenciais para o
+          ambiente de trabalho. Emitido pelo CEET SENAI Sebastião Camargo.
+        </div>
+        <div class="course-meta">
+          <div class="meta-item"><div class="meta-dot"></div>400 horas</div>
+          <div class="meta-item"><div class="meta-dot"></div>Jul/2023 — Dez/2023</div>
+          <div class="meta-item"><div class="meta-dot"></div>Certificado em 08/03/2024</div>
+        </div>
+      </div>
+
+      <!-- Card 3 — Ensino Médio -->
+      <div class="course-card c3">
+        <span class="course-badge">✓ Certificado</span>
+        <div class="course-inst">Secretaria de Estado da Educação · RO</div>
+        <div class="course-title">Ensino Médio Regular</div>
+        <div class="course-desc">
+          Conclusão do Ensino Médio/Regular pela Escola Estadual de Ensino Fundamental e
+          Médio Estudo e Trabalho, Porto Velho — RO. Certificado emitido conforme a
+          Lei Federal nº 9.394/96 e Lei Federal nº 7.088/83.
+        </div>
+        <div class="course-meta">
+          <div class="meta-item"><div class="meta-dot"></div>Concluído em 2020</div>
+          <div class="meta-item"><div class="meta-dot"></div>31/12/2020</div>
+          <div class="meta-item"><div class="meta-dot"></div>Porto Velho, RO</div>
+        </div>
+      </div>
+
+      <!-- Card 4 — NAVE TECH / UNIR + Samsung -->
+      <div class="course-card c4 wide">
+        <span class="course-badge">✓ Certificado</span>
+        <div class="course-inst">UNIR · Samsung · PROCEA</div>
+        <div class="course-title">N.A.V.E TECH RO — Núcleo Avançado de Empreendedorismo e Tecnologia</div>
+        <div class="course-desc">
+          Projeto de extensão da Fundação Universidade Federal de Rondônia (UNIR), coordenado pelo
+          Departamento Acadêmico de Ciências da Computação, com patrocínio Samsung. Programa estruturado
+          em quatro trilhas complementares, focado em formação tecnológica, inovação e empreendedorismo.
+        </div>
+        <div class="course-meta" style="gap:2rem; flex-wrap:wrap; margin-bottom:1.2rem">
+          <div class="meta-item"><div class="meta-dot"></div>220 horas totais</div>
+          <div class="meta-item"><div class="meta-dot"></div>Jun/2022 — Jul/2024</div>
+          <div class="meta-item"><div class="meta-dot"></div>Frequência 100%</div>
+          <div class="meta-item"><div class="meta-dot"></div>Certificado em 30/07/2025</div>
+        </div>
+        <!-- Trilhas -->
+        <div style="display:flex; gap:.8rem; flex-wrap:wrap; margin-top:.5rem;">
+          <span style="font-family:var(--mono);font-size:.7rem;padding:.35rem .9rem;background:rgba(38,208,206,0.1);border:1px solid rgba(38,208,206,0.25);color:#26d0ce;letter-spacing:.07em;">
+            Trilha I · Tecnologia — 60h
+          </span>
+          <span style="font-family:var(--mono);font-size:.7rem;padding:.35rem .9rem;background:rgba(38,208,206,0.1);border:1px solid rgba(38,208,206,0.25);color:#26d0ce;letter-spacing:.07em;">
+            Trilha II · Inovação Tecnol. — 40h
+          </span>
+          <span style="font-family:var(--mono);font-size:.7rem;padding:.35rem .9rem;background:rgba(38,208,206,0.1);border:1px solid rgba(38,208,206,0.25);color:#26d0ce;letter-spacing:.07em;">
+            Trilha III · Empreendedorismo — 40h
+          </span>
+          <span style="font-family:var(--mono);font-size:.7rem;padding:.35rem .9rem;background:rgba(38,208,206,0.1);border:1px solid rgba(38,208,206,0.25);color:#26d0ce;letter-spacing:.07em;">
+            Trilha IV · Fab Lab — 80h
+          </span>
+        </div>
+      </div>
+
+      <!-- Card 5 — Graduação -->
+      <div class="course-card c5 wide">
+        <span style="position:absolute;top:1.5rem;right:1.5rem;font-family:var(--mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;padding:.3rem .7rem;background:rgba(124,109,250,0.1);color:var(--accent2);border:1px solid rgba(124,109,250,0.25);">⏳ Em andamento</span>
+        <div class="course-inst">UNIR · Fundação Universidade Federal de Rondônia</div>
+        <div class="course-title">Bacharelado em Ciência da Computação</div>
+        <div class="course-desc">
+          Curso de graduação em Ciência da Computação, com formação em algoritmos, estruturas
+          de dados, programação, sistemas operacionais, banco de dados, inteligência artificial,
+          redes de computadores e engenharia de software. Atualmente no 8° período.
+        </div>
+        <div class="course-meta">
+          <div class="meta-item"><div class="meta-dot"></div>8° Período</div>
+          <div class="meta-item"><div class="meta-dot"></div>Início: 2020</div>
+          <div class="meta-item"><div class="meta-dot"></div>Conclusão prevista: 2027</div>
+          <div class="meta-item"><div class="meta-dot"></div>Porto Velho, RO</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════ HABILIDADES ════════════════ -->
+<section id="habilidades">
+  <div class="section-inner">
+    <div class="skills-layout">
+      <div class="skills-left">
+        <div class="section-tag">// competências</div>
+        <h2 class="section-title">Habilidades<br>Técnicas</h2>
+        <p>
+          Formação sólida em redes de computadores, operação de sistemas e
+          ferramentas digitais. Complementada pela graduação em Ciência da
+          Computação e pelo programa de inovação NAVE TECH.
+        </p>
+        <p>
+          Experiência prática com configuração de redes, cabeamento estruturado,
+          suporte técnico, lógica de programação e empreendedorismo tecnológico.
+        </p>
+        <div class="tags-area">
+          <span class="tag">TCP/IP</span>
+          <span class="tag">Cabeamento</span>
+          <span class="tag">Roteadores</span>
+          <span class="tag">Switches</span>
+          <span class="tag">Linux</span>
+          <span class="tag">Windows Server</span>
+          <span class="tag">Suporte TI</span>
+          <span class="tag">Fab Lab</span>
+          <span class="tag">Algoritmos</span>
+          <span class="tag">Banco de Dados</span>
+          <span class="tag">Inovação</span>
+          <span class="tag">Empreendedorismo</span>
+        </div>
+      </div>
+      <div class="skills-right">
+        <div class="skill-row">
+          <div class="skill-header">
+            <span class="skill-name">REDES DE COMPUTADORES</span>
+            <span class="skill-pct">90%</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-header">
+            <span class="skill-name">INFRAESTRUTURA DE TI</span>
+            <span class="skill-pct">85%</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-header">
+            <span class="skill-name">CIÊNCIA DA COMPUTAÇÃO</span>
+            <span class="skill-pct">75%</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-header">
+            <span class="skill-name">OPERAÇÃO DE COMPUTADORES</span>
+            <span class="skill-pct">88%</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-header">
+            <span class="skill-name">INOVAÇÃO & EMPREENDEDORISMO</span>
+            <span class="skill-pct">70%</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-header">
+            <span class="skill-name">SUPORTE TÉCNICO</span>
+            <span class="skill-pct">82%</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════ TRAJETÓRIA ════════════════ -->
+<section id="trajetoria">
+  <div class="section-inner">
+    <div class="section-tag">// linha do tempo</div>
+    <h2 class="section-title">Trajetória Acadêmica</h2>
+    <p class="section-desc">Uma jornada de aprendizado contínuo em tecnologia e computação.</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot">🏫</div>
+        <div class="tl-content">
+          <div class="tl-date">2020</div>
+          <div class="tl-title">Conclusão do Ensino Médio</div>
+          <div class="tl-sub">E.E.E.F.M Estudo e Trabalho · Porto Velho, RO</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🎓</div>
+        <div class="tl-content">
+          <div class="tl-date">2020 → Presente</div>
+          <div class="tl-title">Ciência da Computação — UNIR</div>
+          <div class="tl-sub">Fundação Universidade Federal de Rondônia · 8° período · Previsão de conclusão: 2027</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">💻</div>
+        <div class="tl-content">
+          <div class="tl-date">Jul — Dez 2023</div>
+          <div class="tl-title">Curso de Operador de Computador</div>
+          <div class="tl-sub">SENAI Rondônia · CEET Sebastião Camargo · 400 horas</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🚀</div>
+        <div class="tl-content">
+          <div class="tl-date">Jun 2022 — Jul 2024</div>
+          <div class="tl-title">N.A.V.E TECH RO — Samsung / UNIR</div>
+          <div class="tl-sub">Projeto de Extensão · Tecnologia, Inovação, Empreendedorismo e Fab Lab · 220 horas · Frequência 100%</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">🏆</div>
+        <div class="tl-content">
+          <div class="tl-date">Concluído em 20/02/2025</div>
+          <div class="tl-title">Técnico em Redes de Computadores</div>
+          <div class="tl-sub">SENAI Rondônia · CEET Sebastião Camargo · 1.000 horas · Diploma emitido em 16/05/2025</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">⭐</div>
+        <div class="tl-content">
+          <div class="tl-date">2027 (previsto)</div>
+          <div class="tl-title">Conclusão da Graduação</div>
+          <div class="tl-sub">Bacharel em Ciência da Computação · UNIR · Porto Velho, RO</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════ CONTATO ════════════════ -->
+<section id="contato">
+  <div class="section-inner">
+    <div class="contact-wrap">
+      <div class="contact-left">
+        <div class="section-tag">// contato</div>
+        <h2 class="section-title">Vamos<br>conversar?</h2>
+        <p>
+          Estou aberto a oportunidades de estágio, emprego na área de
+          tecnologia, projetos colaborativos e networking. Sou de
+          Porto Velho, RO e tenho disponibilidade para oportunidades remotas.
+        </p>
+        <div class="contact-links">
+          <a class="contact-link" href="mailto:seuemail@email.com">
+            <div class="cl-icon">✉</div>
+            <div>
+              <div class="cl-label">E-mail</div>
+              <div class="cl-val">seuemail@email.com</div>
+            </div>
+          </a>
+          <a class="contact-link" href="https://linkedin.com/in/seuperfil" target="_blank">
+            <div class="cl-icon">in</div>
+            <div>
+              <div class="cl-label">LinkedIn</div>
+              <div class="cl-val">linkedin.com/in/seuperfil</div>
+            </div>
+          </a>
+          <a class="contact-link" href="https://github.com/seuperfil" target="_blank">
+            <div class="cl-icon" style="font-family:var(--mono);font-size:.85rem">GH</div>
+            <div>
+              <div class="cl-label">GitHub</div>
+              <div class="cl-val">github.com/seuperfil</div>
+            </div>
+          </a>
+          <div class="contact-link" style="cursor:default;">
+            <div class="cl-icon">📍</div>
+            <div>
+              <div class="cl-label">Localização</div>
+              <div class="cl-val">Porto Velho, Rondônia — Brasil</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="contact-form">
+          <div style="font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;">// envie uma mensagem</div>
+          <div class="form-group">
+            <label>Nome</label>
+            <input type="text" placeholder="Seu nome completo" />
+          </div>
+          <div class="form-group">
+            <label>E-mail</label>
+            <input type="email" placeholder="seu@email.com" />
+          </div>
+          <div class="form-group">
+            <label>Assunto</label>
+            <input type="text" placeholder="Oportunidade / Projeto / Dúvida..." />
+          </div>
+          <div class="form-group">
+            <label>Mensagem</label>
+            <textarea placeholder="Olá José Lucas, gostaria de..."></textarea>
+          </div>
+          <button class="btn-submit">Enviar mensagem →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ FOOTER ════════════════ -->
+<footer>
+  <div class="footer-logo">JL<span>.</span>Sabino</div>
+  <div class="footer-copy">© 2025 José Lucas Lopes Sabino · Porto Velho, RO</div>
+  <div class="footer-links">
+    <a href="#sobre">Sobre</a>
+    <a href="#cursos">Cursos</a>
+    <a href="#contato">Contato</a>
+  </div>
+</footer>
+
+<script>
+  // Intersection Observer — animate skill bars on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.skill-fill').forEach(bar => {
+          bar.style.animation = 'none';
+          bar.offsetHeight; // reflow
+          bar.style.animation = 'barGrow 1.2s ease both';
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+  const skillsSection = document.querySelector('#habilidades');
+  if (skillsSection) observer.observe(skillsSection);
+
+  // Smooth active nav link highlight
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
+    });
+  });
+
+  // Form submit fake feedback
+  document.querySelector('.btn-submit').addEventListener('click', function() {
+    this.textContent = '✓ Mensagem enviada!';
+    this.style.background = 'linear-gradient(135deg, #4ade80, #22c55e)';
+    setTimeout(() => {
+      this.textContent = 'Enviar mensagem →';
+      this.style.background = '';
+    }, 3000);
+  });
+</script>
+</body>
+</html>
