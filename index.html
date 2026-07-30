@@ -4,9 +4,36 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>José Lucas Lopes Sabino — Tech Portfolio</title>
+  <meta name="description" content="José Lucas Lopes Sabino — Técnico em Redes de Computadores e estudante de Ciência da Computação em Porto Velho, RO. Certificações, habilidades técnicas e trajetória acadêmica." />
+  <meta name="theme-color" content="#09090f" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="José Lucas Lopes Sabino — Tech Portfolio" />
+  <meta property="og:description" content="Técnico em Redes de Computadores e estudante de Ciência da Computação em Porto Velho, RO." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- SEO: dados estruturados de pessoa -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "José Lucas Lopes Sabino",
+    "jobTitle": "Técnico em Redes de Computadores",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Porto Velho",
+      "addressRegion": "RO",
+      "addressCountry": "BR"
+    },
+    "email": "mailto:joselucaslopessabino@hotmail.com",
+    "sameAs": [
+      "https://linkedin.com/in/joselucaslopessabino",
+      "https://github.com/lucas-programador-lang"
+    ]
+  }
+  </script>
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -21,11 +48,25 @@
       --accent3:   #ff6b6b;
       --gold:      #f5c842;
       --text:      #e8e8f0;
-      --muted:     #7a7a9a;
+      /* FIX: muted claareado levemente (#7a7a9a -> #9494ba) para melhorar
+         contraste de textos pequenos (labels, meta) sobre --bg */
+      --muted:     #9494ba;
       --mono:      'JetBrains Mono', monospace;
     }
 
     html { scroll-behavior: smooth; }
+
+    /* FIX: respeita a preferência de sistema por menos animação —
+       antes nenhuma animação do site checava isso. */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
 
     body {
       background: var(--bg);
@@ -50,6 +91,41 @@
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 3px; }
+
+    /* FIX: estado de foco visível consistente para navegação por teclado —
+       antes só inputs tinham :focus estilizado. */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    /* NOVO: link "pular para o conteúdo", visível só ao navegar via Tab */
+    .skip-link {
+      position: absolute;
+      top: -60px;
+      left: 12px;
+      z-index: 1000;
+      background: var(--accent);
+      color: var(--bg);
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: .85rem;
+      padding: 10px 18px;
+      border-radius: 4px;
+      transition: top .2s;
+    }
+    .skip-link:focus { top: 12px; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
 
     /* ─── NAV ─── */
     nav {
@@ -82,7 +158,8 @@
       text-transform: uppercase;
       transition: color .2s;
     }
-    .nav-links a:hover { color: var(--accent); }
+    .nav-links a:hover,
+    .nav-links a[aria-current="page"] { color: var(--accent); }
     .nav-cta {
       font-family: var(--mono);
       font-size: 0.78rem;
@@ -95,6 +172,42 @@
       transition: background .2s, color .2s;
     }
     .nav-cta:hover { background: var(--accent); color: var(--bg); }
+
+    /* NOVO: botão hambúrguer — só aparece no breakpoint mobile (media query abaixo) */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      width: 26px;
+      padding: 4px;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+    .nav-toggle span {
+      display: block;
+      height: 2px;
+      width: 100%;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform .25s ease, opacity .2s ease;
+    }
+    .nav-toggle.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.is-open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* NOVO: painel do menu mobile e overlay */
+    .nav-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.6);
+      backdrop-filter: blur(2px);
+      z-index: 95;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease;
+    }
+    .nav-overlay.is-visible { opacity: 1; pointer-events: auto; }
 
     /* ─── HERO ─── */
     #hero {
@@ -166,7 +279,14 @@
       margin-bottom: 1.5rem;
       animation: fadeUp .7s ease .1s both;
     }
-    .hero-title .line2 { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.2); }
+    /* FIX: antes dependia só de -webkit-text-stroke com color:transparent —
+       sem essa propriedade suportada, "Lopes" simplesmente não existe na
+       tela. Agora há uma cor de preenchimento leve como base, então na
+       pior das hipóteses o nome aparece em tom sutil em vez de sumir. */
+    .hero-title .line2 {
+      color: rgba(255,255,255,0.15);
+      -webkit-text-stroke: 1px rgba(255,255,255,0.2);
+    }
     .hero-title .accent-word {
       background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
       -webkit-background-clip: text;
@@ -186,6 +306,7 @@
       display: flex;
       gap: 1rem;
       align-items: center;
+      flex-wrap: wrap;
       animation: fadeUp .7s ease .3s both;
     }
     .btn-primary {
@@ -239,6 +360,17 @@
       background-clip: text;
     }
     .stat-label { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+    /* NOVO: versão mobile das estatísticas — antes elas simplesmente
+       desapareciam (display:none) abaixo de 900px sem substituto. */
+    .hero-stats-mobile {
+      display: none;
+      gap: 1.5rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+      animation: fadeUp .7s ease .3s both;
+    }
+    .hero-stats-mobile .stat-item { text-align: left; }
 
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(30px); }
@@ -327,6 +459,9 @@
       font-size: 0.72rem;
       color: var(--accent);
       letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
     }
     .chip-1 { bottom: 10px; left: -20px; }
     .chip-2 { top: 20px; right: -30px; color: var(--gold); }
@@ -357,9 +492,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
       flex-shrink: 0;
       background: var(--card);
+      color: var(--accent);
     }
     .info-label { color: var(--muted); font-size: .8rem; font-family: var(--mono); }
     .info-val { color: var(--text); font-size: .95rem; }
@@ -456,8 +591,30 @@
       color: #4ade80;
       border: 1px solid rgba(74,222,128,0.2);
     }
+    /* FIX: antes o badge "Em andamento" do card 5 era feito com um bloco
+       inline style duplicando quase tudo de .course-badge só pra trocar a
+       cor — vira modificador de classe, mais fácil de manter. */
+    .course-badge.in-progress {
+      background: rgba(124,109,250,0.1);
+      color: var(--accent2);
+      border-color: rgba(124,109,250,0.25);
+    }
     /* full-width card */
     .course-card.wide { grid-column: span 2; }
+
+    /* NOVO: trilhas do card NAVE TECH — antes cada uma tinha um bloco de
+       inline style repetido inteiro (5 propriedades x 4 spans). */
+    .trilhas-wrap { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: .5rem; }
+    .trilha-tag {
+      font-family: var(--mono);
+      font-size: .7rem;
+      padding: .35rem .9rem;
+      background: rgba(38,208,206,0.1);
+      border: 1px solid rgba(38,208,206,0.25);
+      color: #26d0ce;
+      letter-spacing: .07em;
+    }
+    .course-meta.wide-meta { gap: 2rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
 
     /* ─── SKILLS ─── */
     #habilidades { background: var(--bg2); }
@@ -538,7 +695,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.2rem;
+      color: var(--accent);
       flex-shrink: 0;
       position: relative;
       z-index: 1;
@@ -595,7 +752,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.1rem;
+      color: var(--accent);
       flex-shrink: 0;
     }
     .cl-label { font-family: var(--mono); font-size: .7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
@@ -624,6 +781,12 @@
     .form-group input:focus,
     .form-group textarea:focus { border-color: var(--accent); }
     .form-group textarea { min-height: 120px; }
+    .form-note {
+      font-family: var(--mono);
+      font-size: .7rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
     .btn-submit {
       font-family: var(--mono);
       font-size: 0.8rem;
@@ -639,6 +802,7 @@
       align-self: flex-start;
     }
     .btn-submit:hover { opacity: .85; }
+    .btn-submit:disabled { opacity: .5; cursor: not-allowed; }
 
     /* ─── FOOTER ─── */
     footer {
@@ -686,9 +850,30 @@
     /* ─── RESPONSIVE ─── */
     @media (max-width: 900px) {
       nav { padding: 1rem 1.5rem; }
-      .nav-links { display: none; }
+
+      /* FIX: em vez de sumir, o menu vira um painel deslizante controlado
+         pelo botão hambúrguer (JS na seção final do arquivo). */
+      .nav-toggle { display: flex; }
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 64px; left: 0; right: 0;
+        z-index: 96;
+        flex-direction: column;
+        gap: 0;
+        background: rgba(9,9,15,0.97);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border);
+        padding: .5rem 1.5rem 1.5rem;
+      }
+      .nav-links.is-open { display: flex; }
+      .nav-links li { border-top: 1px solid var(--border); }
+      .nav-links a { display: block; padding: 1rem 0; }
+      .nav-cta { display: none; }
+
       #hero { padding: 0 1.5rem; }
       .hero-stats { display: none; }
+      .hero-stats-mobile { display: flex; }
       .section-inner { padding: 5rem 1.5rem; }
       .about-grid { grid-template-columns: 1fr; gap: 3rem; }
       .avatar-ring { width: 200px; height: 200px; }
@@ -700,14 +885,24 @@
       footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
       .hero-title { font-size: clamp(2.2rem, 9vw, 3.5rem); }
     }
+
+    /* NOVO: ajuste pra faixa intermediária (tablet) — antes os cards de
+       curso iam direto de 2 colunas apertadas pra 1 coluna só < 900px,
+       sem estado intermediário confortável. */
+    @media (min-width: 600px) and (max-width: 760px) {
+      .courses-grid { grid-template-columns: 1fr; }
+      .course-card.wide { grid-column: span 1; }
+    }
   </style>
 </head>
 <body>
 
+<a href="#main" class="skip-link">Pular para o conteúdo</a>
+
 <!-- ════════════════ NAV ════════════════ -->
 <nav>
   <div class="nav-logo">JL<span>.</span>Sabino</div>
-  <ul class="nav-links">
+  <ul class="nav-links" id="navLinks">
     <li><a href="#sobre">Sobre</a></li>
     <li><a href="#cursos">Cursos</a></li>
     <li><a href="#habilidades">Habilidades</a></li>
@@ -715,7 +910,13 @@
     <li><a href="#contato">Contato</a></li>
   </ul>
   <a href="#contato" class="nav-cta">Contato</a>
+  <button type="button" class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navLinks">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="nav-overlay" id="navOverlay"></div>
+
+<main id="main">
 
 <!-- ════════════════ HERO ════════════════ -->
 <section id="hero">
@@ -735,16 +936,22 @@
     </p>
     <div class="hero-actions">
       <a href="#cursos" class="btn-primary">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
         Ver Certificações
       </a>
       <a href="#sobre" class="btn-ghost">
         Sobre mim
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
     </div>
+    <!-- NOVO: versão mobile das estatísticas, visível só abaixo de 900px -->
+    <div class="hero-stats-mobile">
+      <div class="stat-item"><div class="stat-num">4+</div><div class="stat-label">Certificações</div></div>
+      <div class="stat-item"><div class="stat-num">1620<span style="font-size:1.2rem">h</span></div><div class="stat-label">Horas de curso</div></div>
+      <div class="stat-item"><div class="stat-num">8°</div><div class="stat-label">Período · CC</div></div>
+    </div>
   </div>
-  <div class="hero-stats">
+  <div class="hero-stats" aria-hidden="true">
     <div class="stat-item">
       <div class="stat-num">4+</div>
       <div class="stat-label">Certificações</div>
@@ -771,17 +978,19 @@
           <div class="avatar-inner">JL</div>
         </div>
         <div class="about-chip chip-1">
-          <span>📍 Porto Velho · RO</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Porto Velho · RO
         </div>
         <div class="about-chip chip-2">
-          <span>🎓 CC · 8° Período</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          CC · 8° Período
         </div>
       </div>
       <div class="about-text">
         <div class="section-tag">// sobre</div>
         <h3>Apaixonado por<br>tecnologia e redes</h3>
         <p>
-          Sou <strong>José Lucas Lopes Sabino</strong>, tenho 24 anos e moro em Porto Velho, RO.
+          Sou <strong>José Lucas Lopes Sabino</strong>, moro em Porto Velho, RO.
           Técnico em Redes de Computadores formado pelo <strong>SENAI Rondônia</strong> e atualmente
           cursando o 8° período de <strong>Ciência da Computação na Estácio</strong>, com conclusão
           prevista para 2027.
@@ -793,28 +1002,40 @@
         </p>
         <div class="info-list">
           <div class="info-item">
-            <div class="info-icon">🎂</div>
+            <div class="info-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
             <div>
               <div class="info-label">Idade</div>
-              <div class="info-val">24 anos (08/08/2001)</div>
+              <!-- FIX: só idade, sem a data de nascimento completa em texto
+                   puro — data de nascimento exata é dado sensível pra
+                   deixar público (é usada como pergunta de segurança em
+                   vários serviços). -->
+              <div class="info-val">24 anos</div>
             </div>
           </div>
           <div class="info-item">
-            <div class="info-icon">📍</div>
+            <div class="info-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
             <div>
               <div class="info-label">Localização</div>
               <div class="info-val">Porto Velho, Rondônia — Brasil</div>
             </div>
           </div>
           <div class="info-item">
-            <div class="info-icon">🎓</div>
+            <div class="info-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
             <div>
               <div class="info-label">Graduação</div>
               <div class="info-val">Ciência da Computação · Estácio · 8° período</div>
             </div>
           </div>
           <div class="info-item">
-            <div class="info-icon">🏅</div>
+            <div class="info-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M8.5 13.5 6 21l6-3 6 3-2.5-7.5"/></svg>
+            </div>
             <div>
               <div class="info-label">Formação Técnica</div>
               <div class="info-val">Técnico em Redes de Computadores · SENAI</div>
@@ -900,32 +1121,23 @@
           Departamento Acadêmico de Ciências da Computação, com patrocínio Samsung. Programa estruturado
           em quatro trilhas complementares, focado em formação tecnológica, inovação e empreendedorismo.
         </div>
-        <div class="course-meta" style="gap:2rem; flex-wrap:wrap; margin-bottom:1.2rem">
+        <div class="course-meta wide-meta">
           <div class="meta-item"><div class="meta-dot"></div>220 horas totais</div>
           <div class="meta-item"><div class="meta-dot"></div>Jun/2022 — Jul/2024</div>
           <div class="meta-item"><div class="meta-dot"></div>Frequência 100%</div>
           <div class="meta-item"><div class="meta-dot"></div>Certificado em 30/07/2025</div>
         </div>
-        <!-- Trilhas -->
-        <div style="display:flex; gap:.8rem; flex-wrap:wrap; margin-top:.5rem;">
-          <span style="font-family:var(--mono);font-size:.7rem;padding:.35rem .9rem;background:rgba(38,208,206,0.1);border:1px solid rgba(38,208,206,0.25);color:#26d0ce;letter-spacing:.07em;">
-            Trilha I · Tecnologia — 60h
-          </span>
-          <span style="font-family:var(--mono);font-size:.7rem;padding:.35rem .9rem;background:rgba(38,208,206,0.1);border:1px solid rgba(38,208,206,0.25);color:#26d0ce;letter-spacing:.07em;">
-            Trilha II · Inovação Tecnol. — 40h
-          </span>
-          <span style="font-family:var(--mono);font-size:.7rem;padding:.35rem .9rem;background:rgba(38,208,206,0.1);border:1px solid rgba(38,208,206,0.25);color:#26d0ce;letter-spacing:.07em;">
-            Trilha III · Empreendedorismo — 40h
-          </span>
-          <span style="font-family:var(--mono);font-size:.7rem;padding:.35rem .9rem;background:rgba(38,208,206,0.1);border:1px solid rgba(38,208,206,0.25);color:#26d0ce;letter-spacing:.07em;">
-            Trilha IV · Fab Lab — 80h
-          </span>
+        <div class="trilhas-wrap">
+          <span class="trilha-tag">Trilha I · Tecnologia — 60h</span>
+          <span class="trilha-tag">Trilha II · Inovação Tecnol. — 40h</span>
+          <span class="trilha-tag">Trilha III · Empreendedorismo — 40h</span>
+          <span class="trilha-tag">Trilha IV · Fab Lab — 80h</span>
         </div>
       </div>
 
       <!-- Card 5 — Graduação -->
       <div class="course-card c5 wide">
-        <span style="position:absolute;top:1.5rem;right:1.5rem;font-family:var(--mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;padding:.3rem .7rem;background:rgba(124,109,250,0.1);color:var(--accent2);border:1px solid rgba(124,109,250,0.25);">⏳ Em andamento</span>
+        <span class="course-badge in-progress">⏳ Em andamento</span>
         <div class="course-inst">Estácio · Universidade Estácio de Sá</div>
         <div class="course-title">Bacharelado em Ciência da Computação</div>
         <div class="course-desc">
@@ -1037,7 +1249,7 @@
 
     <div class="timeline">
       <div class="tl-item">
-        <div class="tl-dot">🏫</div>
+        <div class="tl-dot" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-6h6v6"/></svg></div>
         <div class="tl-content">
           <div class="tl-date">2020</div>
           <div class="tl-title">Conclusão do Ensino Médio</div>
@@ -1045,7 +1257,7 @@
         </div>
       </div>
       <div class="tl-item">
-        <div class="tl-dot">🎓</div>
+        <div class="tl-dot" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
         <div class="tl-content">
           <div class="tl-date">2020 → Presente</div>
           <div class="tl-title">Ciência da Computação — Estácio</div>
@@ -1053,7 +1265,7 @@
         </div>
       </div>
       <div class="tl-item">
-        <div class="tl-dot">💻</div>
+        <div class="tl-dot" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
         <div class="tl-content">
           <div class="tl-date">Jul — Dez 2023</div>
           <div class="tl-title">Curso de Operador de Computador</div>
@@ -1061,7 +1273,7 @@
         </div>
       </div>
       <div class="tl-item">
-        <div class="tl-dot">🚀</div>
+        <div class="tl-dot" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m4.5 16.5-2 5 5-2M22 2l-7.5 7.5M15.5 6 22 2M9.5 12l2.5 2.5L22 4.5 19.5 2 9.5 12z"/></svg></div>
         <div class="tl-content">
           <div class="tl-date">Jun 2022 — Jul 2024</div>
           <div class="tl-title">N.A.V.E TECH RO — Samsung / UNIR</div>
@@ -1069,7 +1281,7 @@
         </div>
       </div>
       <div class="tl-item">
-        <div class="tl-dot">🏆</div>
+        <div class="tl-dot" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M8.5 13.5 6 21l6-3 6 3-2.5-7.5"/></svg></div>
         <div class="tl-content">
           <div class="tl-date">Concluído em 20/02/2025</div>
           <div class="tl-title">Técnico em Redes de Computadores</div>
@@ -1077,7 +1289,7 @@
         </div>
       </div>
       <div class="tl-item">
-        <div class="tl-dot">⭐</div>
+        <div class="tl-dot" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 9.5 8.5 3 9l5 4.5L6.5 20 12 16.5 17.5 20 16 13.5l5-4.5-6.5-.5z"/></svg></div>
         <div class="tl-content">
           <div class="tl-date">2027 (previsto)</div>
           <div class="tl-title">Conclusão da Graduação</div>
@@ -1104,28 +1316,28 @@
         </p>
         <div class="contact-links">
           <a class="contact-link" href="mailto:joselucaslopessabino@hotmail.com">
-            <div class="cl-icon">✉</div>
+            <div class="cl-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg></div>
             <div>
               <div class="cl-label">E-mail</div>
               <div class="cl-val">joselucaslopessabino@hotmail.com</div>
             </div>
           </a>
-          <a class="contact-link" href="https://linkedin.com/in/joselucaslopessabino" target="_blank">
-            <div class="cl-icon">in</div>
+          <a class="contact-link" href="https://linkedin.com/in/joselucaslopessabino" target="_blank" rel="noopener noreferrer">
+            <div class="cl-icon" aria-hidden="true" style="font-family:var(--mono);font-size:.85rem">in</div>
             <div>
               <div class="cl-label">LinkedIn</div>
               <div class="cl-val">linkedin.com/in/joselucaslopessabino</div>
             </div>
           </a>
-          <a class="contact-link" href="https://github.com/lucas-programador-lang" target="_blank">
-            <div class="cl-icon" style="font-family:var(--mono);font-size:.85rem">GH</div>
+          <a class="contact-link" href="https://github.com/lucas-programador-lang" target="_blank" rel="noopener noreferrer">
+            <div class="cl-icon" style="font-family:var(--mono);font-size:.85rem" aria-hidden="true">GH</div>
             <div>
               <div class="cl-label">GitHub</div>
               <div class="cl-val">github.com/lucas-programador-lang</div>
             </div>
           </a>
           <div class="contact-link" style="cursor:default;">
-            <div class="cl-icon">📍</div>
+            <div class="cl-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
             <div>
               <div class="cl-label">Localização</div>
               <div class="cl-val">Porto Velho, Rondônia — Brasil</div>
@@ -1134,35 +1346,44 @@
         </div>
       </div>
       <div>
-        <div class="contact-form">
+        <!-- FIX: formulário agora usa mailto: real com os dados preenchidos,
+             em vez de simular um envio que nunca acontece. Ele ABRE o
+             cliente de e-mail do visitante com tudo preenchido — não é
+             um envio automático silencioso (isso exigiria um backend que
+             este site não tem), mas também não finge um envio que não
+             ocorreu. -->
+        <form class="contact-form" id="contactForm">
           <div style="font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;">// envie uma mensagem</div>
           <div class="form-group">
-            <label>Nome</label>
-            <input type="text" placeholder="Seu nome completo" />
+            <label for="cf-nome">Nome</label>
+            <input id="cf-nome" name="nome" type="text" placeholder="Seu nome completo" required />
           </div>
           <div class="form-group">
-            <label>E-mail</label>
-            <input type="email" placeholder="seu@email.com" />
+            <label for="cf-email">E-mail</label>
+            <input id="cf-email" name="email" type="email" placeholder="seu@email.com" required />
           </div>
           <div class="form-group">
-            <label>Assunto</label>
-            <input type="text" placeholder="Oportunidade / Projeto / Dúvida..." />
+            <label for="cf-assunto">Assunto</label>
+            <input id="cf-assunto" name="assunto" type="text" placeholder="Oportunidade / Projeto / Dúvida..." required />
           </div>
           <div class="form-group">
-            <label>Mensagem</label>
-            <textarea placeholder="Olá José Lucas, gostaria de..."></textarea>
+            <label for="cf-mensagem">Mensagem</label>
+            <textarea id="cf-mensagem" name="mensagem" placeholder="Olá José Lucas, gostaria de..." required></textarea>
           </div>
-          <button class="btn-submit">Enviar mensagem →</button>
-        </div>
+          <p class="form-note">Ao enviar, seu cliente de e-mail padrão vai abrir com a mensagem já preenchida.</p>
+          <button type="submit" class="btn-submit">Enviar mensagem →</button>
+        </form>
       </div>
     </div>
   </div>
 </section>
 
+</main>
+
 <!-- ════════════════ FOOTER ════════════════ -->
 <footer>
   <div class="footer-logo">JL<span>.</span>Sabino</div>
-  <div class="footer-copy">© 2025 José Lucas Lopes Sabino · Porto Velho, RO</div>
+  <div class="footer-copy">© <span id="footerYear"></span> José Lucas Lopes Sabino · Porto Velho, RO</div>
   <div class="footer-links">
     <a href="#sobre">Sobre</a>
     <a href="#cursos">Cursos</a>
@@ -1186,7 +1407,7 @@
   const skillsSection = document.querySelector('#habilidades');
   if (skillsSection) observer.observe(skillsSection);
 
-  // Smooth active nav link highlight
+  // Smooth active nav link highlight (agora também marca aria-current)
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-links a');
   window.addEventListener('scroll', () => {
@@ -1195,19 +1416,69 @@
       if (window.scrollY >= s.offsetTop - 120) current = s.id;
     });
     navLinks.forEach(a => {
-      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
+      const isCurrent = a.getAttribute('href') === '#' + current;
+      a.style.color = isCurrent ? 'var(--accent)' : '';
+      if (isCurrent) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
     });
   });
 
-  // Form submit fake feedback
-  document.querySelector('.btn-submit').addEventListener('click', function() {
-    this.textContent = '✓ Mensagem enviada!';
-    this.style.background = 'linear-gradient(135deg, #4ade80, #22c55e)';
-    setTimeout(() => {
-      this.textContent = 'Enviar mensagem →';
-      this.style.background = '';
-    }, 3000);
-  });
+  // NOVO: menu mobile — antes não existia nenhum jeito de reabrir a
+  // navegação em telas pequenas.
+  const navToggle = document.getElementById('navToggle');
+  const navLinksEl = document.getElementById('navLinks');
+  const navOverlay = document.getElementById('navOverlay');
+
+  function fecharMenu() {
+    navLinksEl.classList.remove('is-open');
+    navToggle.classList.remove('is-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+    navOverlay.classList.remove('is-visible');
+  }
+
+  if (navToggle && navLinksEl) {
+    navToggle.addEventListener('click', () => {
+      const isOpen = navLinksEl.classList.toggle('is-open');
+      navToggle.classList.toggle('is-open', isOpen);
+      navToggle.setAttribute('aria-expanded', String(isOpen));
+      navOverlay.classList.toggle('is-visible', isOpen);
+    });
+    navLinksEl.querySelectorAll('a').forEach(link => link.addEventListener('click', fecharMenu));
+    navOverlay.addEventListener('click', fecharMenu);
+  }
+
+  // FIX: formulário de contato agora abre um mailto: real com os dados
+  // preenchidos, em vez de só trocar o texto do botão sem enviar nada.
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    contactForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const nome = this.nome.value.trim();
+      const email = this.email.value.trim();
+      const assunto = this.assunto.value.trim();
+      const mensagem = this.mensagem.value.trim();
+
+      const corpo = `Nome: ${nome}\nE-mail para retorno: ${email}\n\n${mensagem}`;
+      const mailtoUrl =
+        `mailto:joselucaslopessabino@hotmail.com` +
+        `?subject=${encodeURIComponent(assunto)}` +
+        `&body=${encodeURIComponent(corpo)}`;
+
+      window.location.href = mailtoUrl;
+
+      const btn = this.querySelector('.btn-submit');
+      btn.textContent = 'Abrindo seu cliente de e-mail...';
+      btn.disabled = true;
+      setTimeout(() => {
+        btn.textContent = 'Enviar mensagem →';
+        btn.disabled = false;
+      }, 3000);
+    });
+  }
+
+  // FIX: ano do rodapé agora é dinâmico (estava fixo em "2025" no HTML)
+  const footerYear = document.getElementById('footerYear');
+  if (footerYear) footerYear.textContent = new Date().getFullYear();
 </script>
 </body>
 </html>
